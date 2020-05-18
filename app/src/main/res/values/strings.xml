@@ -3,4 +3,8 @@
     <string name="sum_of_concentrations">Sum of Concentrations</string>
     <string name="settings">Settings</string>
     <string name="play">Play</string>
+    <string name="score">Score:</string>
+    <string name="sums">Sums</string>
+    <string name="todo">TODO</string>
+    <string name="_space" />
 </resources>
