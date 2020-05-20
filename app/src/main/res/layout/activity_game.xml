@@ -1,39 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="24dp"
     tools:context=".GameActivity">
 
-    <TableRow
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/score" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/score"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="" />
-    </TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:text="@string/score" />
 
-    <ScrollView
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="textEnd"
+                android:text="@string/correct_guesses" />
+
+            <TextView
+                android:id="@+id/correctGuess_text"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="" />
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:id="@+id/answer_screen"
+        android:orientation="vertical"
+        android:gravity="center"
         android:layout_weight="1">
-
-        <LinearLayout
-            android:id="@+id/answer_screen"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,13 +65,14 @@
         android:orientation="vertical"
         android:layout_weight="1">
 
-
         <Button
             android:id="@+id/guess_1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="@string/_space" />
+            android:textSize="32sp"
+            android:text="@string/_space"
+            tools:ignore="NestedWeights" />
 
         <Button
             android:id="@+id/guess_2"
@@ -62,8 +86,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:onClick="fatGuess"
             android:text="@string/_space" />
 
     </LinearLayout>
 
-</TableLayout>
+</LinearLayout>
