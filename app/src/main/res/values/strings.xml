@@ -8,4 +8,5 @@
     <string name="todo">TODO</string>
     <string name="_space" />
     <string name="correct_guesses">Correct Guesses: </string>
+    <string name="time">"Time: "</string>
 </resources>

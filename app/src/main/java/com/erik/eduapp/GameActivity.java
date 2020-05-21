@@ -4,13 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.Locale;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
+
+    private int seconds = 0;
+    private boolean running = true;
+    private boolean wasRunning;
 
     private Random random = new Random();
     private int firstNum;
@@ -26,7 +33,39 @@ public class GameActivity extends AppCompatActivity {
         ViewGroup gameRows = findViewById(R.id.answer_screen);
         getLayoutInflater().inflate(R.layout.answer_text, gameRows);
 
+        if(savedInstanceState != null){
+            seconds = savedInstanceState.getInt("seconds");
+            running = savedInstanceState.getBoolean("running");
+            wasRunning = savedInstanceState.getBoolean("wasRunning");
+        }
+
         runGame();
+        runTimer();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("seconds", seconds);
+        savedInstanceState.putBoolean("running", running);
+        savedInstanceState.putBoolean("wasRunning", wasRunning);
+        savedInstanceState.putInt("firstNum", firstNum);
+        savedInstanceState.putInt("secondNum", secondNum);
+        savedInstanceState.putInt("secretNum", secretNum);
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        wasRunning = running;
+        running = false;
+    }
+
+    protected void onResume(){
+        super.onResume();
+        if(wasRunning){
+            running = true;
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -46,7 +85,6 @@ public class GameActivity extends AppCompatActivity {
         firstNum = generateNum();
         secondNum = generateNum();
         secretNum = generateNum();
-
         //Decides what symbol will be used in the sum and uses that to define solution
         symbolDecider = random.nextInt(3)+1;
         if (symbolDecider == 1){
@@ -93,6 +131,25 @@ public class GameActivity extends AppCompatActivity {
             guess_3.setText(String.valueOf(correctSum));
         } else
             System.out.println("Skrrt");
+    }
+
+    private void runTimer(){
+        final TextView timeView = (TextView)findViewById(R.id.time_view);
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                int hours = seconds/3600;
+                int minutes = (seconds%3600)/60;
+                int secs = seconds %60;
+                String time = String.format(Locale.getDefault(),"%d:%02d:%02d", hours, minutes, secs);
+                timeView.setText(time);
+                if(running){
+                    seconds++;
+                }
+                handler.postDelayed(this, 1000);
+            }
+        });
     }
 
     private int generateNum(){
