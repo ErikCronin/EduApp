@@ -3,6 +3,9 @@ package com.erik.eduapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -49,9 +52,6 @@ public class GameActivity extends AppCompatActivity {
         savedInstanceState.putInt("seconds", seconds);
         savedInstanceState.putBoolean("running", running);
         savedInstanceState.putBoolean("wasRunning", wasRunning);
-        savedInstanceState.putInt("firstNum", firstNum);
-        savedInstanceState.putInt("secondNum", secondNum);
-        savedInstanceState.putInt("secretNum", secretNum);
     }
 
     @Override

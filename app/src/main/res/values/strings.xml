@@ -9,4 +9,6 @@
     <string name="_space" />
     <string name="correct_guesses">Correct Guesses: </string>
     <string name="time">"Time: "</string>
+    <string name="press_play_or_shake_to_start">Press play or shake to start</string>
+    <string name="quick_sums">Quick Sums</string>
 </resources>
