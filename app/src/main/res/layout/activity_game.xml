@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
+    tools:ignore="NestedWeights"
     tools:context=".GameActivity">
 
     <TableLayout
@@ -86,27 +87,27 @@
         android:layout_weight="1">
 
         <Button
-            android:id="@+id/guess_1"
+            android:id="@+id/button_one"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:textSize="32sp"
-            android:text="@string/_space"
-            tools:ignore="NestedWeights" />
-
-        <Button
-            android:id="@+id/guess_2"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:onClick="playSound"
             android:text="@string/_space" />
 
         <Button
-            android:id="@+id/guess_3"
+            android:id="@+id/button_two"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:onClick="fatGuess"
+            android:onClick="playSound"
+            android:text="@string/_space" />
+
+        <Button
+            android:id="@+id/button_three"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:onClick="playSound"
             android:text="@string/_space" />
 
     </LinearLayout>

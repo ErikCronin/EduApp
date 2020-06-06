@@ -6,6 +6,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -18,6 +23,12 @@ import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
 
+    MediaPlayer player;
+    private SoundPool soundPool;
+    private int soundCorrect, soundWrong;
+
+    private boolean isOneCorrect, isTwoCorrect, isThreeCorrect;
+
     private int seconds = 0;
     private boolean running = true;
     private boolean wasRunning;
@@ -28,6 +39,8 @@ public class GameActivity extends AppCompatActivity {
     private int secretNum;
     private int symbolDecider;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,12 +49,51 @@ public class GameActivity extends AppCompatActivity {
         ViewGroup gameRows = findViewById(R.id.answer_screen);
         getLayoutInflater().inflate(R.layout.answer_text, gameRows);
 
+        //Checks if variable is empty and puts in background music, good for different song
+        if (player == null){
+            player = MediaPlayer.create(this, R.raw.bgm_game);
+            player.setVolume(0.5f, 0.5f);
+
+            //Restarts loop when music has finished
+            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    player.start();
+                }
+            });
+        }
+
+        //Max Streams variable to save having to updates twice in OS if statement
+        int maxStreams = 1;
+
+        //If statement to decide which variables are needed to play audio
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            //Will only run if the OS API 21 or higher
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+            soundPool = new SoundPool.Builder()
+                    .setMaxStreams(maxStreams)
+                    .setAudioAttributes(audioAttributes)
+                    .build();
+
+        } else {
+            //Will only run if the OS API is 20 or lower
+            soundPool = new SoundPool(maxStreams, AudioManager.STREAM_MUSIC, 0);
+        }
+
+        //Loads in sounds from raw folder
+        soundCorrect = soundPool.load(this, R.raw.correct, 1);
+        soundWrong = soundPool.load(this, R.raw.bruh, 1);
+
         if(savedInstanceState != null){
             seconds = savedInstanceState.getInt("seconds");
             running = savedInstanceState.getBoolean("running");
             wasRunning = savedInstanceState.getBoolean("wasRunning");
         }
 
+        player.start();
         runGame();
         runTimer();
     }
@@ -71,9 +123,9 @@ public class GameActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void runGame(){
         TextView question = findViewById(R.id.sumQuestion);
-        Button guess_1 = findViewById(R.id.guess_1);
-        Button guess_2 = findViewById(R.id.guess_2);
-        Button guess_3 = findViewById(R.id.guess_3);
+        Button guess_1 = findViewById(R.id.button_one);
+        Button guess_2 = findViewById(R.id.button_two);
+        Button guess_3 = findViewById(R.id.button_three);
         int correctSum = 0;
         int incorrectSumOne = 0;
         int incorrectSumTwo = 0;
@@ -121,14 +173,23 @@ public class GameActivity extends AppCompatActivity {
             guess_1.setText(String.valueOf(correctSum));
             guess_2.setText(String.valueOf(wrongTextOne));
             guess_3.setText(String.valueOf(wrongTextTwo));
+            isOneCorrect = true;
+            isTwoCorrect = false;
+            isThreeCorrect = false;
         } else if (buttonRandomizer == 2) {
             guess_1.setText(String.valueOf(wrongTextOne));
             guess_2.setText(String.valueOf(correctSum));
             guess_3.setText(String.valueOf(wrongTextTwo));
+            isOneCorrect = false;
+            isTwoCorrect = true;
+            isThreeCorrect = false;
         } else if (buttonRandomizer == 3) {
             guess_1.setText(String.valueOf(wrongTextOne));
             guess_2.setText(String.valueOf(wrongTextTwo));
             guess_3.setText(String.valueOf(correctSum));
+            isOneCorrect = false;
+            isTwoCorrect = false;
+            isThreeCorrect = true;
         } else
             System.out.println("Skrrt");
     }
@@ -146,6 +207,9 @@ public class GameActivity extends AppCompatActivity {
                 timeView.setText(time);
                 if(running){
                     seconds++;
+//                    if(seconds == 6){
+//                        finish();
+//                    }
                 }
                 handler.postDelayed(this, 1000);
             }
@@ -176,5 +240,65 @@ public class GameActivity extends AppCompatActivity {
 
     public void fatGuess(View view){
         runGame();
+    }
+
+    public void playSound(View view){
+        if(isOneCorrect){
+            switch (view.getId()){
+                case R.id.button_one:
+                    soundPool.play(soundCorrect, 1, 1, 0, 0, 1);
+                    runGame();
+                    break;
+                case R.id.button_two:
+                case R.id.button_three:
+                    soundPool.play(soundWrong, 1, 1, 0, 0, 1);
+                    break;
+            }
+        } else if(isTwoCorrect) {
+            switch (view.getId()) {
+                case R.id.button_two:
+                    soundPool.play(soundCorrect, 1, 1, 0, 0, 1);
+                    runGame();
+                    break;
+                case R.id.button_one:
+                case R.id.button_three:
+                    soundPool.play(soundWrong, 1, 1, 0, 0, 1);
+                    break;
+            }
+        } else if(isThreeCorrect) {
+            switch (view.getId()) {
+                case R.id.button_three:
+                    soundPool.play(soundCorrect, 1, 1, 0, 0, 1);
+                    runGame();
+                    break;
+                case R.id.button_one:
+                case R.id.button_two:
+                    soundPool.play(soundWrong, 1, 1, 0, 0, 1);
+                    break;
+            }
+        }
+    }
+
+    //Releases SoundPool so it doesn't consume system resources
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        soundPool.release();
+        soundPool = null;
+    }
+
+    //Stops music and clears it from memory, use this to input another song
+    private void stopPlayer(){
+        if (player != null){
+            player.release();
+            player = null;
+        }
+    }
+
+    //Stops music from playing when app is closed
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopPlayer();
     }
 }
