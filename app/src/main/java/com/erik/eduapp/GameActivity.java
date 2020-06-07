@@ -1,11 +1,10 @@
 package com.erik.eduapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.hardware.SensorManager;
+
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -34,11 +33,6 @@ public class GameActivity extends AppCompatActivity {
     private boolean wasRunning;
 
     private Random random = new Random();
-    private int firstNum;
-    private int secondNum;
-    private int secretNum;
-    private int symbolDecider;
-
 
 
     @Override
@@ -46,6 +40,7 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        int maxStreams = 1;
         ViewGroup gameRows = findViewById(R.id.answer_screen);
         getLayoutInflater().inflate(R.layout.answer_text, gameRows);
 
@@ -64,7 +59,6 @@ public class GameActivity extends AppCompatActivity {
         }
 
         //Max Streams variable to save having to updates twice in OS if statement
-        int maxStreams = 1;
 
         //If statement to decide which variables are needed to play audio
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
@@ -99,7 +93,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("seconds", seconds);
         savedInstanceState.putBoolean("running", running);
@@ -126,19 +120,20 @@ public class GameActivity extends AppCompatActivity {
         Button guess_1 = findViewById(R.id.button_one);
         Button guess_2 = findViewById(R.id.button_two);
         Button guess_3 = findViewById(R.id.button_three);
+
         int correctSum = 0;
         int incorrectSumOne = 0;
         int incorrectSumTwo = 0;
         int wrongTextOne = 0;
         int wrongTextTwo = 0;
-        int buttonRandomizer;
-        int wrongRandomizer;
+        int buttonRandomizer, wrongRandomizer;
 
-        firstNum = generateNum();
-        secondNum = generateNum();
-        secretNum = generateNum();
+        int firstNum = generateNum();
+        int secondNum = generateNum();
+        int secretNum = generateNum();
         //Decides what symbol will be used in the sum and uses that to define solution
-        symbolDecider = random.nextInt(3)+1;
+        int symbolDecider = random.nextInt(3) + 1;
+
         if (symbolDecider == 1){
             question.setText(firstNum + " + " + secondNum);
             correctSum = addSum(firstNum, secondNum);
@@ -155,7 +150,7 @@ public class GameActivity extends AppCompatActivity {
             incorrectSumOne = correctSum + secretNum;
             incorrectSumTwo = correctSum - secretNum;
         } else
-            System.out.println("Frick");
+            System.out.println("Symbol not found");
 
         wrongRandomizer = random.nextInt(2) + 1;
         if (wrongRandomizer == 1) {
@@ -165,7 +160,7 @@ public class GameActivity extends AppCompatActivity {
             wrongTextOne = incorrectSumTwo;
             wrongTextTwo = incorrectSumOne;
         } else
-            System.out.println("Dang");
+            System.out.println("Incorrect Sum not found");
 
         //Decides which button has the correct answer
         buttonRandomizer = random.nextInt(3)+1;
@@ -191,11 +186,11 @@ public class GameActivity extends AppCompatActivity {
             isTwoCorrect = false;
             isThreeCorrect = true;
         } else
-            System.out.println("Skrrt");
+            System.out.println("Button Randomizer not found");
     }
 
     private void runTimer(){
-        final TextView timeView = (TextView)findViewById(R.id.time_view);
+        final TextView timeView = findViewById(R.id.time_view);
         final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
@@ -236,10 +231,6 @@ public class GameActivity extends AppCompatActivity {
         int guess;
         guess = numUno * numDuo;
         return guess;
-    }
-
-    public void fatGuess(View view){
-        runGame();
     }
 
     public void playSound(View view){
