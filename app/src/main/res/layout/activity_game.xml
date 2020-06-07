@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:configChanges="keyboardHidden|orientation"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:configChanges="keyboardHidden|orientation"
     android:orientation="vertical"
     android:padding="24dp"
-    tools:ignore="NestedWeights"
-    tools:context=".GameActivity">
+    tools:context=".GameActivity"
+    tools:ignore="NestedWeights">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -40,8 +39,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                android:text="@string/score" />
+                android:text="@string/score"
+                android:textAlignment="textEnd" />
 
             <TextView
                 android:id="@+id/score"
@@ -58,8 +57,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="textEnd"
-                android:text="@string/correct_guesses" />
+                android:text="@string/correct_guesses"
+                android:textAlignment="textEnd" />
 
             <TextView
                 android:id="@+id/correctGuess_text"
@@ -71,20 +70,19 @@
     </TableLayout>
 
     <LinearLayout
+        android:id="@+id/answer_screen"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/answer_screen"
-        android:orientation="vertical"
+        android:layout_weight="1"
         android:gravity="center"
-        android:layout_weight="1">
-    </LinearLayout>
+        android:orientation="vertical" />
 
     <LinearLayout
+        android:id="@+id/guess_screen"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/guess_screen"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/button_one"

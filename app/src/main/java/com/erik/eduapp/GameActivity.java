@@ -45,7 +45,7 @@ public class GameActivity extends AppCompatActivity {
         getLayoutInflater().inflate(R.layout.answer_text, gameRows);
 
         //Checks if variable is empty and puts in background music, good for different song
-        if (player == null){
+        if (player == null) {
             player = MediaPlayer.create(this, R.raw.bgm_game);
             player.setVolume(0.5f, 0.5f);
 
@@ -61,7 +61,7 @@ public class GameActivity extends AppCompatActivity {
         //Max Streams variable to save having to updates twice in OS if statement
 
         //If statement to decide which variables are needed to play audio
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //Will only run if the OS API 21 or higher
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
@@ -81,7 +81,7 @@ public class GameActivity extends AppCompatActivity {
         soundCorrect = soundPool.load(this, R.raw.correct, 1);
         soundWrong = soundPool.load(this, R.raw.bruh, 1);
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             seconds = savedInstanceState.getInt("seconds");
             running = savedInstanceState.getBoolean("running");
             wasRunning = savedInstanceState.getBoolean("wasRunning");
@@ -101,21 +101,21 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         wasRunning = running;
         running = false;
     }
 
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        if(wasRunning){
+        if (wasRunning) {
             running = true;
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private void runGame(){
+    private void runGame() {
         TextView question = findViewById(R.id.sumQuestion);
         Button guess_1 = findViewById(R.id.button_one);
         Button guess_2 = findViewById(R.id.button_two);
@@ -134,17 +134,17 @@ public class GameActivity extends AppCompatActivity {
         //Decides what symbol will be used in the sum and uses that to define solution
         int symbolDecider = random.nextInt(3) + 1;
 
-        if (symbolDecider == 1){
+        if (symbolDecider == 1) {
             question.setText(firstNum + " + " + secondNum);
             correctSum = addSum(firstNum, secondNum);
             incorrectSumOne = correctSum + secretNum;
             incorrectSumTwo = correctSum - secretNum;
-        } else if (symbolDecider == 2){
+        } else if (symbolDecider == 2) {
             question.setText(firstNum + " - " + secondNum);
             correctSum = minusSum(firstNum, secondNum);
             incorrectSumOne = correctSum + secretNum;
             incorrectSumTwo = correctSum - secretNum;
-        } else if(symbolDecider == 3){
+        } else if (symbolDecider == 3) {
             question.setText(firstNum + " * " + secondNum);
             correctSum = mulSum(firstNum, secondNum);
             incorrectSumOne = correctSum + secretNum;
@@ -163,7 +163,7 @@ public class GameActivity extends AppCompatActivity {
             System.out.println("Incorrect Sum not found");
 
         //Decides which button has the correct answer
-        buttonRandomizer = random.nextInt(3)+1;
+        buttonRandomizer = random.nextInt(3) + 1;
         if (buttonRandomizer == 1) {
             guess_1.setText(String.valueOf(correctSum));
             guess_2.setText(String.valueOf(wrongTextOne));
@@ -189,18 +189,18 @@ public class GameActivity extends AppCompatActivity {
             System.out.println("Button Randomizer not found");
     }
 
-    private void runTimer(){
+    private void runTimer() {
         final TextView timeView = findViewById(R.id.time_view);
         final Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
             public void run() {
-                int hours = seconds/3600;
-                int minutes = (seconds%3600)/60;
-                int secs = seconds %60;
-                String time = String.format(Locale.getDefault(),"%d:%02d:%02d", hours, minutes, secs);
+                int hours = seconds / 3600;
+                int minutes = (seconds % 3600) / 60;
+                int secs = seconds % 60;
+                String time = String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, secs);
                 timeView.setText(time);
-                if(running){
+                if (running) {
                     seconds++;
 //                    if(seconds == 6){
 //                        finish();
@@ -211,31 +211,31 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
-    private int generateNum(){
+    private int generateNum() {
         return random.nextInt(20) + 1;
     }
 
-    private int addSum(int numUno, int numDuo){
+    private int addSum(int numUno, int numDuo) {
         int guess;
         guess = numUno + numDuo;
         return guess;
     }
 
-    private int minusSum(int numUno, int numDuo){
+    private int minusSum(int numUno, int numDuo) {
         int guess;
         guess = numUno - numDuo;
         return guess;
     }
 
-    private int mulSum(int numUno, int numDuo){
+    private int mulSum(int numUno, int numDuo) {
         int guess;
         guess = numUno * numDuo;
         return guess;
     }
 
-    public void playSound(View view){
-        if(isOneCorrect){
-            switch (view.getId()){
+    public void playSound(View view) {
+        if (isOneCorrect) {
+            switch (view.getId()) {
                 case R.id.button_one:
                     soundPool.play(soundCorrect, 1, 1, 0, 0, 1);
                     runGame();
@@ -245,7 +245,7 @@ public class GameActivity extends AppCompatActivity {
                     soundPool.play(soundWrong, 1, 1, 0, 0, 1);
                     break;
             }
-        } else if(isTwoCorrect) {
+        } else if (isTwoCorrect) {
             switch (view.getId()) {
                 case R.id.button_two:
                     soundPool.play(soundCorrect, 1, 1, 0, 0, 1);
@@ -256,7 +256,7 @@ public class GameActivity extends AppCompatActivity {
                     soundPool.play(soundWrong, 1, 1, 0, 0, 1);
                     break;
             }
-        } else if(isThreeCorrect) {
+        } else if (isThreeCorrect) {
             switch (view.getId()) {
                 case R.id.button_three:
                     soundPool.play(soundCorrect, 1, 1, 0, 0, 1);
@@ -279,8 +279,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     //Stops music and clears it from memory, use this to input another song
-    private void stopPlayer(){
-        if (player != null){
+    private void stopPlayer() {
+        if (player != null) {
             player.release();
             player = null;
         }

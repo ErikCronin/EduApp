@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         //Check if sensor is available
-        if(sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             accSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             isAccAvail = true;
         } else {
@@ -45,15 +45,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         float currentY = sensorEvent.values[1];
         float currentZ = sensorEvent.values[2];
 
-        if(isNotFirstTime){
+        if (isNotFirstTime) {
             float xDifference = Math.abs(lastX - currentX);
             float yDifference = Math.abs(lastY - currentY);
             float zDifference = Math.abs(lastZ - currentZ);
 
             float shakeThreshold = 5f;
-            if((xDifference > shakeThreshold && yDifference > shakeThreshold)
+            if ((xDifference > shakeThreshold && yDifference > shakeThreshold)
                     || (xDifference > shakeThreshold && zDifference > shakeThreshold)
-                    || (yDifference > shakeThreshold && zDifference > shakeThreshold)){
+                    || (yDifference > shakeThreshold && zDifference > shakeThreshold)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     //when phone is shaken it will do this
                     vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onResume() {
         super.onResume();
 
-        if (isAccAvail){
+        if (isAccAvail) {
             sensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
@@ -90,12 +90,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onPause() {
         super.onPause();
 
-        if (isAccAvail){
+        if (isAccAvail) {
             sensorManager.unregisterListener(this);
         }
     }
 
-    public void startGame(View view){
+    public void startGame(View view) {
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
     }
